@@ -560,10 +560,12 @@ if ($recurrent) {
             var ccExpYear = $(elm.id.replace("_expirationMonth", "_expirationYear")).value;
 
             //Recurrence expiration check
-            var expiration = new Date("20" + ccExpYear + "/" + ('0000'+ccExpMonth).slice(-2) + "/01");
-            var recurrenceExpiration = new Date(document.getElementById("recurrenceFinalDate").value);
-            if(expiration.getTime() < recurrenceExpiration.getTime()){
-                return false;
+            if(document.getElementById("recurrenceFinalDate")){
+                var expiration = new Date("20" + ccExpYear + "/" + ('0000'+ccExpMonth).slice(-2) + "/01");
+                var recurrenceExpiration = new Date(document.getElementById("recurrenceFinalDate").value);
+                if(expiration.getTime() < recurrenceExpiration.getTime()){
+                    return false;
+                }
             }
             
             var currentTime = new Date();

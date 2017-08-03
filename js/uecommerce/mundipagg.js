@@ -380,7 +380,7 @@ function verify_cc_expiration_date(v, elm) {
 
 function token_or_not(num, c, field) {
     var type = $$('input[name="payment\\[method\\]"]:checked').first().value;
-
+    console.log(type);
     if (document.getElementById(type + '_token_' + num + '_' + c).value == 'new') {
         /* Remove disable fields */
         $(type + '_' + num + '_' + c + '_cc_type').enable();
@@ -401,7 +401,7 @@ function token_or_not(num, c, field) {
         /* Show new credit card fields */
         $(type + '_new_credit_card_' + num + '_' + c).show();
 
-        if ($('parcelamento_' + num + '_' + c) != null) {
+        if ($('parcelamento_' + num + '_' + c) != null && type != "mundipagg_recurrencepayment") {
             $('parcelamento_' + num + '_' + c).hide();
         }
         if (document.getElementById('value_' + num + '_' + c) != null) {
