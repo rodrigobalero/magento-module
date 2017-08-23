@@ -11,7 +11,7 @@
             <block type="page/html_head" name="extra_js" as="extra_js" after="-" template="mundipagg/extras.phtml">
                 <action method="addItem">
                     <type>js</type>
-                    <name>uecommerce/mundipagg.js</name>
+                    <name>mundipagg/mundipagg.js</name>
                 </action>
             </block>
             <reference name="before_body_end">
@@ -37,7 +37,7 @@
             <block type="page/html_head" name="extra_js" as="extra_js" after="-" template="mundipagg/extras.phtml">
                 <action method="addItem">
                     <type>js</type>
-                    <name>uecommerce/mundipagg.js</name>
+                    <name>mundipagg/mundipagg.js</name>
                 </action>
             </block>
         </reference>
@@ -53,7 +53,7 @@
             <block type="page/html_head" name="extra_js" as="extra_js" after="-" template="mundipagg/extras.phtml">
                 <action method="addItem">
                     <type>js</type>
-                    <name>uecommerce/mundipagg.js</name>
+                    <name>mundipagg/mundipagg.js</name>
                 </action>
             </block>
         </reference>
@@ -69,19 +69,19 @@
             <block type="page/html_head" name="extra_js" as="extra_js" after="-" template="mundipagg/extras.phtml">
                 <action method="addItem">
                     <type>js</type>
-                    <name>uecommerce/mundipagg.js</name>
+                    <name>mundipagg/mundipagg.js</name>
                 </action>
             </block>
         </reference>
     </opc_index_index>
-    <mundipagg_standard_redirect module="Uecommerce_Mundipagg" translate="label">
+    <mundipagg_standard_redirect module="Mundipagg" translate="label">
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
         </reference>
     </mundipagg_standard_redirect>
-    <mundipagg_standard_partial module="Uecommerce_Mundipagg" translate="label">
+    <mundipagg_standard_partial module="Mundipagg" translate="label">
 
         <reference name="head">
             <action method="addItem">
@@ -93,7 +93,7 @@
             <block type="page/html_head" name="extra_js" as="extra_js" after="-" template="mundipagg/extras.phtml">
                 <action method="addItem">
                     <type>js</type>
-                    <name>uecommerce/mundipagg.js</name>
+                    <name>mundipagg/mundipagg.js</name>
                 </action>
             </block>
         </reference>
@@ -103,21 +103,21 @@
             </action>
         </reference>
     </mundipagg_standard_partial>
-    <mundipagg_standard_cancel module="Uecommerce_Mundipagg" translate="label">
+    <mundipagg_standard_cancel module="Mundipagg" translate="label">
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
         </reference>
     </mundipagg_standard_cancel>
-    <mundipagg_standard_fcancel module="Uecommerce_Mundipagg" translate="label">
+    <mundipagg_standard_fcancel module="Mundipagg" translate="label">
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
         </reference>
     </mundipagg_standard_fcancel>
-    <mundipagg_standard_success module="Uecommerce_Mundipagg" translate="label">
+    <mundipagg_standard_success module="Mundipagg" translate="label">
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>

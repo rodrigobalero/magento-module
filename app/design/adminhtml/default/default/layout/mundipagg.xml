@@ -4,7 +4,7 @@
     <adminhtml_sales_order_create_index>
         <reference name="head">
             <action method="addJs">
-                <file>uecommerce/mundipagg.js</file>
+                <file>mundipagg/mundipagg.js</file>
             </action>
         </reference>
     </adminhtml_sales_order_create_index>
@@ -12,10 +12,10 @@
     <adminhtml_catalog_product_edit>
         <reference name="head">
             <action method="addJs">
-                <file>uecommerce/jquery-3.1.0.min.js</file>
+                <file>mundipagg/jquery-3.1.0.min.js</file>
             </action>
             <action method="addJs">
-                <file>uecommerce/recurrency.js</file>
+                <file>mundipagg/recurrency.js</file>
             </action>
         </reference>
     </adminhtml_catalog_product_edit>
@@ -23,10 +23,10 @@
     <adminhtml_catalog_product_new>
         <reference name="head">
             <action method="addJs">
-                <file>uecommerce/jquery-3.1.0.min.js</file>
+                <file>mundipagg/jquery-3.1.0.min.js</file>
             </action>
             <action method="addJs">
-                <file>uecommerce/recurrency.js</file>
+                <file>mundipagg/recurrency.js</file>
             </action>
         </reference>
     </adminhtml_catalog_product_new>
