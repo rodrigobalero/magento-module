@@ -1507,48 +1507,64 @@ class Uecommerce_Mundipagg_Model_Api extends Uecommerce_Mundipagg_Model_Standard
      * @param array  $_logRequest
      * @return array $_response
      */
-    public function sendRequest($dataToPost, $url, $_logRequest = array()) {
+    public function sendRequest($dataToPost, $url, $_logRequest = array())
+    {
         $helperLog = new Uecommerce_Mundipagg_Helper_Log(__METHOD__);
+
         if (empty($dataToPost) || empty($url)) {
-            $errMsg = __METHOD__ . "Exception: one or more arguments not informed to request";
+            $errMsg = "Exception: one or more arguments not informed to request";
             $helperLog->error($errMsg);
+
             throw new InvalidArgumentException($errMsg);
         }
+
         if (empty($_logRequest)) {
             $_logRequest = $dataToPost;
         }
+
         $requestRawJson = json_encode($dataToPost);
         $requestJSON = $this->helperUtil->jsonEncodePretty($_logRequest);
-        $helperLog->info("Request:\n{$requestJSON}\n");
+        $helperLog->info("Request: \nTo: {$url}\n{$requestJSON}\n");
         $ch = curl_init();
+
         // Header
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'MerchantKey: ' . $this->modelStandard->getMerchantKey() . ''));
+
         // Set the url, number of POST vars, POST data
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $requestRawJson);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
         $timeoutLimit = Mage::getStoreConfig('payment/mundipagg_standard/integration_timeout_limit');
+
         if (is_null($timeoutLimit) === false) {
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeoutLimit);
         }
+
         // Execute post
         $_response = curl_exec($ch);
+
         // Close connection
         curl_close($ch);
+
         // Is there an error?
         $xml = simplexml_load_string($_response);
         $responseJSON = $this->helperUtil->jsonEncodePretty($xml);
         $responseArray = json_decode($responseJSON, true);
+
         if ($_response != 'false') {
             $helperLog->info("Response:\n{$responseJSON} \n");
         } else {
             $helperLog->warning("Response: Integration timeout!");
         }
+
         $responseData = array(
             'xmlData'   => $xml,
             'arrayData' => $responseArray
         );
+
         $this->clearAntifraudDataFromSession();
+
         return $responseData;
     }
     /**

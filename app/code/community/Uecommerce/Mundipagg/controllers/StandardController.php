@@ -174,7 +174,23 @@ class Uecommerce_Mundipagg_StandardController extends Mage_Core_Controller_Front
     {
         $session = Mage::getSingleton('checkout/session');
 
-        if (!$session->getLastSuccessQuoteId()) {
+        $lastSuccessQuoteId = $session->getLastSuccessQuoteId();
+        $lastRealOrderId = $session->getLastRealOrderId();
+
+        $helperLog = new Uecommerce_Mundipagg_Helper_Log(__METHOD__);
+        $helperLog->info(
+            "Order #{$lastRealOrderId} | " .
+            'Trying to cancel order number ' . $lastRealOrderId .
+            ' with quoteId number ' . $lastSuccessQuoteId
+        );
+
+        if (!$lastSuccessQuoteId) {
+            $helperLog->error(
+                "Order #{$lastRealOrderId} | " .
+                'Unable to find quoteId ' . $lastSuccessQuoteId .
+                'Order #' . $lastRealOrderId . 'will not be canceled'
+            );
+
             $this->_redirect('checkout/cart');
 
             return;
@@ -189,12 +205,15 @@ class Uecommerce_Mundipagg_StandardController extends Mage_Core_Controller_Front
             ->save()
             ->collectTotals();
 
-        if ($session->getLastRealOrderId()) {
-            $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
+        if ($lastRealOrderId) {
+            $order = Mage::getModel('sales/order')
+                ->loadByIncrementId($lastRealOrderId);
 
             if ($order->getId() && $order->canCancel()) {
                 $order->cancel()->save();
             }
+        } else {
+            $helperLog->error('Unable to find orderId');
         }
 
         $session->clear();

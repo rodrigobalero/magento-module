@@ -1035,7 +1035,9 @@ class Uecommerce_Mundipagg_Model_Standard extends Mage_Payment_Model_Method_Abst
                     $result = $helper->issetOr($approvalRequest['result'], false);
 
                     if ($result !== false) {
-                        $helperLog->info("{$logLabel} | Payment not authorized order will be canceled.");
+                        $incrementId = $order->getIncrementId();
+
+                        $helperLog->info("Order #{$incrementId} | Payment not authorized order will be canceled.");
                         Mage::getSingleton('checkout/session')->setApprovalRequestSuccess('cancel');
                     }
                 }
@@ -1137,7 +1139,9 @@ class Uecommerce_Mundipagg_Model_Standard extends Mage_Payment_Model_Method_Abst
                             $result = $helper->issetOr($approvalRequest['result'], false);
 
                             if ($result !== false) {
-                                $helperLog->info("{$logLabel} | Payment not authorized order will be canceled.");
+                                $incrementId = $order->getIncrementId();
+
+                                $helperLog->info("Order #{$incrementId} | Payment not authorized order will be canceled.");
                                 Mage::getSingleton('checkout/session')->setApprovalRequestSuccess('cancel');
                             }
                         }
