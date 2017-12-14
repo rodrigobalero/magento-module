@@ -916,6 +916,15 @@ class Uecommerce_Mundipagg_Model_Standard extends Mage_Payment_Model_Method_Abst
     public function doPayment($payment, $order)
     {
         try {
+
+            $mundipaggInterest = $payment->getOrder()->getMundipaggInterest();
+            if ($mundipaggInterest !== null) {
+                $payment->getOrder()->setBaseGrandTotal(
+                    floatval($payment->getOrder()->getBaseGrandTotal()) + $mundipaggInterest);
+                $payment->getOrder()->save();
+                $payment->save();
+            }
+
             $helper = Mage::helper('mundipagg');
             $session = Mage::getSingleton('checkout/session');
             $mundipaggData = $session->getMundipaggData();
