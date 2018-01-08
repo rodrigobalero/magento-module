@@ -941,8 +941,6 @@ class Uecommerce_Mundipagg_Model_Api extends Uecommerce_Mundipagg_Model_Standard
     public function processOrder($postData) {
         $helperLog = new Uecommerce_Mundipagg_Helper_Log(__METHOD__);
 
-        $helperOrderStatus = new Uecommerce_Mundipagg_Helper_OrderStatus();
-
         $returnMessage = '';
         try {
             if (!isset($postData['xmlStatusNotification'])) {
@@ -1076,92 +1074,24 @@ class Uecommerce_Mundipagg_Model_Api extends Uecommerce_Mundipagg_Model_Standard
             } else {
                 $amountInCents = null;
             }
-            switch ($lowerStatus) {
 
-                case 'captured':
+            $this->processNotificationPostStatus(
+                $lowerStatus,
+                $order,
+                $amountToCapture,
+                $transactionKey,
+                $orderReference,
+                $returnMessageLabel,
+                $status,
+                $capturedAmountInCents,
+                $data,
+                $transactionData,
+                $statusWithError
+            );
 
-                    return $helperOrderStatus->processCapturedStatus(
-                            $order,
-                            $amountToCapture,
-                            $transactionKey,
-                            $orderReference,
-                            $helperLog
-                        );
-                    break;
-
-                case 'paid':
-                case 'overpaid':
-
-                    return $helperOrderStatus->processPaidStatus(
-                            $order,
-                            $helperLog,
-                            $returnMessageLabel,
-                            $status,
-                            $capturedAmountInCents,
-                            $data
-                        );
-                    break;
-
-                case 'underpaid':
-
-                    return $helperOrderStatus->processUnderpaidStatus(
-                            $order,
-                            $helperLog,
-                            $returnMessageLabel,
-                            $capturedAmountInCents,
-                            $status
-                        );
-                    break;
-
-                case 'notauthorized':
-
-                    return $helperOrderStatus->processNotAuthorizedStatus(
-                        $order,
-                        $transactionData,
-                        $returnMessageLabel,
-                        $helperLog
-                    );
-                    break;
-
-                case 'canceled':
-                case 'refunded':
-                case 'voided':
-
-                    return
-                        $helperOrderStatus->processCanceledStatus(
-                            $order,
-                            $returnMessageLabel,
-                            $helperLog,
-                            $status
-                        );
-                    break;
-
-                case 'authorizedpendingcapture':
-
-                    return $helperOrderStatus->processAuthorizedPendingCaptureStatus(
-                        $order,
-                        $helperLog,
-                        $status
-                    );
-                    break;
-
-                case $statusWithError:
-
-                    return $helperOrderStatus->processWithErrorStatus(
-                        $order,
-                        $helperLog,
-                        $returnMessageLabel
-                    );
-                    break;
-
-                // For other status we add comment to history
-                default:
-                    $returnMessage = "Order #{$order->getIncrementId()} | unexpected transaction status: {$status}";
-                    $helperLog->info($returnMessage);
-                    return "OK | {$returnMessage}";
-            }
         } catch (Exception $e) {
-            return $this->processNotRecognizedStatus($e, $helperLog);
+            $helperOrderStatus = new Uecommerce_Mundipagg_Helper_OrderStatus();
+            return $helperOrderStatus->processNotRecognizedStatus($e, $helperLog);
         }
     }
     /**
@@ -1955,5 +1885,114 @@ class Uecommerce_Mundipagg_Model_Api extends Uecommerce_Mundipagg_Model_Standard
             return 'AuthOnly';
         }
         return $standard->getCreditCardOperationEnum();
+    }
+
+    /**
+     ** Deal with all notification post status
+     */
+    private function processNotificationPostStatus(
+        $lowerStatus,
+        $order,
+        $amountToCapture,
+        $transactionKey,
+        $orderReference,
+        $returnMessageLabel,
+        $status,
+        $capturedAmountInCents,
+        $data,
+        $transactionData,
+        $statusWithError
+    )
+    {
+        $helperLog = new Uecommerce_Mundipagg_Helper_Log();
+        $helperOrderStatus = new Uecommerce_Mundipagg_Helper_OrderStatus();
+
+        switch ($lowerStatus) {
+
+            case 'captured':
+
+                return $helperOrderStatus->processCapturedStatus(
+                    $order,
+                    $amountToCapture,
+                    $transactionKey,
+                    $orderReference,
+                    $helperLog
+                );
+                break;
+
+            case 'paid':
+            case 'overpaid':
+
+                return $helperOrderStatus->processPaidStatus(
+                    $order,
+                    $helperLog,
+                    $returnMessageLabel,
+                    $status,
+                    $capturedAmountInCents,
+                    $data
+                );
+                break;
+
+            case 'underpaid':
+
+                return $helperOrderStatus->processUnderpaidStatus(
+                    $order,
+                    $helperLog,
+                    $returnMessageLabel,
+                    $capturedAmountInCents,
+                    $status
+                );
+                break;
+
+            case 'notauthorized':
+
+                return $helperOrderStatus->processNotAuthorizedStatus(
+                    $order,
+                    $transactionData,
+                    $returnMessageLabel,
+                    $helperLog
+                );
+                break;
+
+            case 'canceled':
+            case 'refunded':
+            case 'voided':
+
+                return
+                    $helperOrderStatus->processCanceledStatus(
+                        $order,
+                        $returnMessageLabel,
+                        $helperLog,
+                        $status
+                    );
+                break;
+
+            case 'authorizedpendingcapture':
+
+                return $helperOrderStatus->processAuthorizedPendingCaptureStatus(
+                    $order,
+                    $helperLog,
+                    $status
+                );
+                break;
+
+            case $statusWithError:
+
+                return $helperOrderStatus->processWithErrorStatus(
+                    $order,
+                    $helperLog,
+                    $returnMessageLabel
+                );
+                break;
+
+            // For other status we add comment to history
+            default:
+
+                return $helperOrderStatus->processDefaultStatus(
+                    $order,
+                    $status,
+                    $helperLog
+                );
+        }
     }
 }

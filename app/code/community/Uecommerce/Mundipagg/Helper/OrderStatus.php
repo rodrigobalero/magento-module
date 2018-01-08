@@ -266,4 +266,11 @@ class Uecommerce_Mundipagg_Helper_OrderStatus extends Mage_Core_Helper_Abstract
 
         return "KO | {$returnMessage}";
     }
+
+    public function processDefaultStatus($order,$status, $helperLog)
+    {
+        $returnMessage = "Order #{$order->getIncrementId()} | unexpected transaction status: {$status}";
+        $helperLog->info($returnMessage);
+        return "OK | {$returnMessage}";
+    }
 }
